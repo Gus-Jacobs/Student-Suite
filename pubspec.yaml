@@ -1,0 +1,193 @@
+name: student_suite
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+13
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # ICONS
+  cupertino_icons: ^1.0.8
+
+  # FIREBASE & AUTH
+  firebase_core: ^4.0.0
+  firebase_auth: ^6.0.0
+  firebase_storage: ^13.0.0 # For storing profile pictures
+  google_sign_in: ^7.1.1
+  cloud_functions: ^6.0.0
+  cloud_firestore: ^6.0.0
+  firebase_app_check: ^0.4.0
+
+  # STATE MANAGEMENT
+  provider: ^6.1.2
+
+  # LOCAL STORAGE
+  shared_preferences: ^2.2.3
+
+  # UI & UTILITY
+  intl: ^0.19.0
+  table_calendar: ^3.2.0
+  uuid: ^4.4.0
+
+  # ADDED DEPENDENCIES
+  webview_flutter: ^4.0.0
+  in_app_purchase: ^3.2.3
+  in_app_purchase_storekit: ^0.4.4
+  google_fonts: 
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_secure_storage: ^9.0.0
+  flutter_colorpicker: ^1.1.0
+  image_picker: ^1.1.2
+  http: ^1.2.1 # For Canvas API requests
+  flutter_web_auth_2: ^4.1.0 # For Canvas OAuth
+  flip_card: ^0.7.0 # For flashcards
+  confetti: ^0.7.0 # For celebratory animations
+  flutter_markdown: ^0.7.7+1 # For rendering AI responses
+  visibility_detector: ^0.4.0+2 # For detecting widget visibility
+  file_picker: ^8.0.7
+  syncfusion_flutter_pdf: ^30.1.39 # Robust PDF text extraction
+  flutter_quill: ^9.6.0 # For rich text editing
+  printing: ^5.13.1 # For PDF generation and printing
+  pdf: ^3.11.3
+  path_provider: ^2.1.5
+  package_info_plus: ^8.0.0
+  flutter_staggered_grid_view: ^0.7.0 # For skills layout,
+  url_launcher: ^6.3.1 # For opening Stripe links,
+  dio: ^5.2.0 # For advanced HTTP requests,
+dependency_overrides:
+  intl: ^0.19.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: "^0.14.4"
+
+  # ADDED DEV DEPENDENCIES
+  hive_generator: ^2.0.1
+  build_runner: 
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+  
+  assets:
+    - assets/img/
+    - assets/img/frames/
+    - assets/fonts/
+    - assets/models/
+
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/to/resolution-aware-images
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/to/asset-from-package
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Metamorphous
+      fonts:
+        - asset: assets/fonts/Metamorphous-Regular.ttf
+    - family: Pacifico
+      fonts:
+        - asset: assets/fonts/Pacifico.ttf
+    - family: Lato
+      fonts:
+        - asset: assets/fonts/latosce.ttf
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Montserrat-Regular.ttf
+    - family: Montserrat Bold
+      fonts:
+        - asset: assets/fonts/Montserrat-Bold.ttf
+    # Roboto is the Flutter default, but including it here ensures consistency
+    # and allows us to reference it by name just like the others.
+    - family: Roboto # This defines the single Roboto font family
+      fonts:
+        # Regular weights
+        - asset: assets/fonts/Roboto-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Roboto-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Roboto-Regular.ttf # Standard/Normal weight
+          weight: 400
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Roboto-Black.ttf
+          weight: 900
+
+        # Italic weights
+        - asset: assets/fonts/Roboto-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/Roboto-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/Roboto-Italic.ttf # Standard Italic
+          weight: 400
+          style: italic
+        - asset: assets/fonts/Roboto-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Roboto-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Roboto-BlackItalic.ttf
+          weight: 900
+          style: italic
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon.png"
+  min_sdk_android: 21 # or whatever your minSdk is
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "#000000" # e.g. "#ffffff"
+    theme_color: "#000000"
+
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/to/font-from-package

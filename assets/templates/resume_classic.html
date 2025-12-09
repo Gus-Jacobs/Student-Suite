@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Professional Resume</title>
+  {{google_fonts}}
+  <style>
+    {{styles}}
+    :root{--accent:#0f172a;--muted:#475569}
+    body{font-family: Georgia, 'Times New Roman', serif;color:#0b1723;margin:0;background:#fff}
+    .wrap{max-width:800px;margin:36px auto;padding:36px}
+    .header{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+    .name{font-size:28px;font-weight:700;margin:0}
+    .tagline{color:var(--muted);margin-top:6px}
+    .contact{color:var(--muted);font-size:13px;margin-top:8px}
+    .section{margin-top:18px}
+    .section-title{font-weight:700;color:var(--accent);font-size:12px;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+    .job{margin-bottom:12px}
+    .job .meta{display:flex;justify-content:space-between}
+    .job .company{font-weight:600}
+    .job .dates{color:var(--muted);font-size:12px}
+    ul{margin:6px 0 0 18px;padding:0}
+    li{margin-bottom:6px}
+    .skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .skill{background:#f1f5f9;padding:6px 10px;border-radius:8px;font-size:12px}
+    @media print{body{margin:0}}    
+  </style>
+  </head>
+<body>
+  <div class="wrap">
+    <div class="header">
+      <div>
+        <div class="name">{{name}}</div>
+        <div class="tagline">{{headline}}</div>
+        <div class="contact">{{contact}}</div>
+      </div>
+      <div style="text-align:right">{{photo}}</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Summary</div>
+      <div>{{summary}}</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Experience</div>
+      {{experience}}
+    </div>
+
+    <div class="section">
+      <div class="section-title">Education</div>
+      {{education}}
+    </div>
+
+    <div class="section">
+      <div class="section-title">Certificates</div>
+      {{certificates}}
+    </div>
+
+    <div class="section">
+      <div class="section-title">Skills</div>
+      <div class="skills">{{skills}}</div>
+    </div>
+  </div>
+</body>
+</html>

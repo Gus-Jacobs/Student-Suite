@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Classic Cover Letter</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      margin: 40px;
+      color: #222;
+      line-height: 1.6;
+      font-size: 12pt;
+    }
+    .header {
+      margin-bottom: 2em;
+    }
+    .user-info {
+      margin-bottom: 1em;
+    }
+    .user-name {
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+    .contact {
+      font-size: 0.95em;
+      color: #444;
+    }
+    .date {
+      margin-top: 0.5em;
+    }
+    .company-info {
+      margin-bottom: 2em;
+    }
+    p {
+      margin: 1em 0;
+    }
+    .signature {
+      margin-top: 2em;
+    }
+    .closing {
+      margin-bottom: 2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="user-info">
+      <div class="user-name">{{user_name}}</div>
+      <div class="contact">{{user_email}} | {{user_phone}}</div>
+    </div>
+    <div class="date">{{date}}</div>
+  </div>
+
+  <div class="company-info">
+    <div>{{company_name}}</div>
+    <div>{{company_address}}</div>
+  </div>
+
+  <p>{{salutation}}</p>
+  <p>{{opening_paragraph}}</p>
+
+  {{#body_paragraphs}}
+  <p>{{.}}</p>
+  {{/body_paragraphs}}
+
+  <p>{{closing_paragraph}}</p>
+
+  <div class="signature">
+    <p class="closing">{{closing}}</p>
+    <p>{{user_name}}</p>
+  </div>
+</body>
+</html>

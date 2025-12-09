@@ -1,0 +1,15 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Allow users to read/write/delete ANY file inside a folder named with their UID
+    // This covers:
+    // - profile_pics/{userId}/...
+    // - uploads/{userId}/...
+    // - user_files/{userId}/...
+    
+    match /{folder}/{userId}/{allPaths=**} {
+       allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

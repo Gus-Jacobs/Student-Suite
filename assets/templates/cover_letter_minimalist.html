@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Flared Cover Letter</title>
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: #f4f4f4;
+      color: #222;
+      margin: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 40px;
+    }
+    .header {
+      margin-bottom: 2em;
+      color: #334155;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+    .header .name {
+      font-size: 1.4em;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .contact {
+      color: #64748b;
+      margin-bottom: 4px;
+    }
+    .date {
+      font-size: 0.9em;
+      color: #94a3b8;
+    }
+    .company {
+      margin-bottom: 1.5em;
+      padding-left: 12px;
+      border-left: 3px solid #6366f1;
+    }
+    .salutation {
+      font-weight: 500;
+      color: #6366f1;
+      margin-top: 1.5em;
+      margin-bottom: 1em;
+    }
+    .body p {
+      margin: 1em 0;
+      line-height: 1.6;
+    }
+    .signature {
+      margin-top: 2em;
+      color: #334155;
+      font-weight: 500;
+    }
+    .signature p {
+      margin: 0.4em 0;
+    }
+    .signature .closing {
+      color: #6366f1;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="name">{{user_name}}</div>
+      <div class="contact">{{user_email}} &bull; {{user_phone}}</div>
+      <div class="date">{{date}}</div>
+    </div>
+
+    <div class="company">
+      <div>{{company_name}}</div>
+      <div>{{company_address}}</div>
+    </div>
+
+    <div class="salutation">{{salutation}}</div>
+
+    <div class="body">
+      <p>{{opening_paragraph}}</p>
+      {{#body_paragraphs}}
+      <p>{{.}}</p>
+      {{/body_paragraphs}}
+      <p>{{closing_paragraph}}</p>
+    </div>
+
+    <div class="signature">
+      <p class="closing">{{closing}}</p>
+      <p>{{user_name}}</p>
+    </div>
+  </div>
+</body>
+</html>

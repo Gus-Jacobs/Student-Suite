@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Modern Cover Letter</title>
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #f8fafc 60%, #e0e7ff 100%);
+      color: #222;
+    }
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px #dbeafe;
+      padding: 40px;
+    }
+    .header {
+      margin-bottom: 2em;
+      color: #6366f1;
+      font-weight: 600;
+    }
+    .contact {
+      margin-bottom: 0.5em;
+      font-size: 0.95em;
+      color: #64748b;
+    }
+    .badge {
+      display: inline-block;
+      background: #6366f1;
+      color: #fff;
+      border-radius: 8px;
+      padding: 2px 10px;
+      font-size: 0.85em;
+      margin-right: 8px;
+    }
+    .date {
+      font-size: 0.9em;
+      color: #94a3b8;
+    }
+    .salutation {
+      font-weight: bold;
+      color: #6366f1;
+      margin-top: 1.5em;
+      margin-bottom: 1em;
+    }
+    .body p {
+      margin: 1em 0;
+      line-height: 1.6;
+    }
+    .signature {
+      margin-top: 2em;
+      color: #6366f1;
+      font-weight: 600;
+    }
+    .signature p {
+      margin: 0.5em 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="contact">
+        <span class="badge">Email</span> {{user_email}}
+        <span class="badge">Phone</span> {{user_phone}}
+      </div>
+      <div class="date">{{date}}</div>
+    </div>
+
+    <div class="company">
+      <div>{{company_name}}</div>
+      <div>{{company_address}}</div>
+    </div>
+
+    <div class="salutation">{{salutation}}</div>
+
+    <div class="body">
+      <p>{{opening_paragraph}}</p>
+      {{#body_paragraphs}}
+      <p>{{.}}</p>
+      {{/body_paragraphs}}
+      <p>{{closing_paragraph}}</p>
+    </div>
+
+    <div class="signature">
+      <p>{{closing}}</p>
+      <p>{{user_name}}</p>
+    </div>
+  </div>
+</body>
+</html>

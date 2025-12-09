@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Professional Resume</title>
+  {{google_fonts}}
+  <style>
+    {{styles}}
+    :root{ --accent: #2b6cb0; --muted:#6b7280; }
+    html,body{margin:0;padding:0;background:#f3f6fb;color:#222;font-family:Inter,Helvetica,Arial,sans-serif}
+    .sheet{max-width:900px;margin:36px auto;padding:32px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(16,24,40,0.06);}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:28px}
+    .left,.right{min-height:100px}
+    .name{font-size:28px;margin:0;color:var(--accent);font-weight:700}
+    .role{color:var(--muted);margin-top:4px}
+    .contact{margin-top:10px;color:var(--muted);font-size:13px}
+    .section{margin-top:18px}
+    .section-title{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#334155;margin-bottom:8px}
+    .job{margin-bottom:12px}
+    .job .meta{display:flex;justify-content:space-between;align-items:flex-start}
+    .job .company{font-weight:600}
+    .job .dates{color:var(--muted);font-size:12px}
+    ul{margin:8px 0 0 18px;padding:0}
+    li{margin-bottom:6px}
+    .skill-badge{display:inline-block;background:#f1f5f9;color:#0f172a;padding:6px 8px;border-radius:8px;margin:4px 6px 4px 0;font-size:12px}
+    .right .box{background:#fafafa;padding:12px;border-radius:8px}
+    .photo{width:96px;height:96px;border-radius:12px;object-fit:cover}
+    @media print{.sheet{box-shadow:none;border:0}}
+    @media (max-width:880px){.grid{grid-template-columns:1fr;}.right{order:2}}
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="grid">
+      <div class="left">
+        <div>
+          <div class="name">{{name}}</div>
+          <div class="role">{{headline}}</div>
+          <div class="contact">{{contact}}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Summary</div>
+          <div>{{summary}}</div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Experience</div>
+          {{experience}}
+        </div>
+
+        <div class="section">
+          <div class="section-title">Education</div>
+          {{education}}
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="box">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="flex:1">
+              <strong>Contact</strong>
+              <div style="color:var(--muted);font-size:13px;margin-top:6px">{{contact}}</div>
+            </div>
+            <div><img class="photo" src="{{photo}}" alt=""/></div>
+          </div>
+
+          <div style="margin-top:8px">
+            <div class="section-title">Skills</div>
+            <div>{{skills}}</div>
+          </div>
+
+          <div style="margin-top:14px">
+            <div class="section-title">Certificates</div>
+            <div>{{certificates}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

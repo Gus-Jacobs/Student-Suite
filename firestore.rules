@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // FIX: This rule allows any AUTHENTICATED user to count the collection,
+    // which is required for the "isFounder" check during sign-up.
+    match /users {
+      allow list: if request.auth != null; 
+    }
+
+    // Users can only read/write/create THEIR OWN document
+    match /users/{userId} {
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+
+      // Subcollections (allow user to manage their own data)
+      match /{document=**} {
+        allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+
+    // --- Other rules (unchanged) ---
+    match /globals/metadata {
+      allow read: if true;
+      allow write: if false; 
+    }
+    
+    match /broadcasts/{docId} {
+      allow get, list: if true;
+      allow create, update, delete: if request.auth != null && request.auth.token.admin == true;
+    }
+    
+    match /feedback/{feedbackId} {
+      allow create: if true;
+      allow read, update, delete: if false; 
+    }
+  }
+}

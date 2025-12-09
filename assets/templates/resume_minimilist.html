@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Flare Resume</title>
+  <!-- Optional injection point for Google Fonts -->
+  {{google_fonts}}
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    /* Optional injection point for user-edited styles (CSS editor / theme overrides) */
+    {{styles}}
+
+    :root{
+      --accent: #ff6b6b;          /* main accent (editable via CSS editor) */
+      --muted: #6b7280;          /* secondary text */
+      --paper: #ffffff;          /* card background */
+      --bg: linear-gradient(135deg, #fff7ed 0%, #fff1f0 100%);
+      --radius: 14px;
+      --shadow: 0 12px 40px rgba(15,23,42,0.08);
+      --tag-bg: rgba(255,107,107,0.12);
+    }
+
+    /* Base reset */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      background: var(--bg);
+      color:#0f172a;
+      line-height:1.45;
+      padding: 24px;
+    }
+
+    .container{
+      max-width: 980px;
+      margin: 40px auto;
+      background: var(--paper);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 28px;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar{
+      padding: 28px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.4));
+      border-right: 1px solid rgba(15,23,42,0.04);
+      min-height: 100%;
+    }
+
+    .main{
+      padding: 28px;
+    }
+
+    /* Header / name */
+    h1{
+      margin:0 0 6px 0;
+      font-size: 26px;
+      letter-spacing: -0.5px;
+      color: #0b1220;
+    }
+    .title-meta{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      color:var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    .contact-line{
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    /* Badges/tags for contact */
+    .badge{
+      display:inline-block;
+      background: var(--tag-bg);
+      color: var(--accent);
+      padding:6px 10px;
+      font-size:0.85rem;
+      border-radius:999px;
+      margin-right:6px;
+      vertical-align:middle;
+      font-weight:600;
+      letter-spacing: 0.2px;
+    }
+
+    /* Section titles */
+    .section-title{
+      margin:0 0 10px 0;
+      font-weight:700;
+      color: #0b1220;
+      font-size: 0.95rem;
+      letter-spacing: 0.6px;
+      text-transform:uppercase;
+    }
+    .hr{
+      height:1px;
+      background: linear-gradient(90deg, rgba(11,18,32,0.06), rgba(11,18,32,0.02));
+      margin:8px 0 18px 0;
+      border-radius: 2px;
+    }
+
+    /* Skills as pill tags */
+    .skills-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .skill-pill{
+      padding:6px 10px;
+      background: rgba(11,18,32,0.06);
+      border-radius: 999px;
+      font-size:0.9rem;
+      color:#0b1220;
+    }
+
+    /* Education & certificates */
+    .list-block{margin-bottom:14px}
+    .edu-item, .cert-item{
+      margin-bottom: 12px;
+      color:#0b1220;
+    }
+    .edu-item .muted, .cert-item .muted{
+      color:var(--muted);
+      font-size:0.92rem;
+    }
+
+    /* Summary */
+    .summary{
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01));
+      padding: 12px 14px;
+      border-radius:8px;
+      margin-bottom: 18px;
+      color: #0b1220;
+    }
+
+    /* Experience timeline */
+    .experience{
+      display:flex;
+      flex-direction:column;
+      gap: 18px;
+    }
+    .exp-item{
+      position:relative;
+      padding-left: 14px;
+      border-left: 3px solid rgba(11,18,32,0.04);
+      padding-bottom: 6px;
+    }
+    .exp-item::before{
+      content: "";
+      width:12px;height:12px;border-radius:50%;
+      background: var(--accent);
+      position:absolute;
+      left:-8px;
+      top:6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .exp-header{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      align-items:flex-start;
+    }
+    .exp-role{
+      font-weight:700;
+      color: #081023;
+    }
+    .exp-company{
+      color: var(--muted);
+      font-style: italic;
+      margin-left:8px;
+      font-weight:600;
+    }
+    .exp-dates{
+      color: var(--muted);
+      font-size:0.92rem;
+      white-space:nowrap;
+    }
+    .exp-bullets{
+      margin:8px 0 0 0;
+      padding-left:16px;
+    }
+    .exp-bullets li{
+      margin-bottom:6px;
+      color:#0b1220;
+    }
+
+    /* Footer small note */
+    .small{
+      color:var(--muted);
+      font-size:0.85rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 880px){
+      .container{grid-template-columns:1fr; padding:0; margin: 20px; border-radius:12px}
+      .sidebar{border-right:none;border-bottom:1px solid rgba(11,18,32,0.04); padding:18px}
+      .main{padding:18px}
+    }
+
+    /* Print-friendly: remove gradient background and shadows */
+    @media print {
+      body{background: #fff; padding:0}
+      .container{box-shadow:none; background: #fff; border-radius:0; max-width: 100%; margin:0; display:block}
+      .sidebar{border-right:none;border-bottom:1px solid #eee}
+      .badge{background:transparent; color: #000}
+    }
+  </style>
+</head>
+<body>
+  <div class="container" role="document" aria-label="Resume - Flare">
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar" aria-labelledby="profile-name">
+      <h1 id="profile-name">{{name}}</h1>
+      <div class="title-meta">
+        <div class="small">{{headline}}</div>
+      </div>
+
+      <div class="contact-line" aria-label="Contact">
+        <!-- Use a single injected contact string so editor controls formatting -->
+        {{contact}}
+      </div>
+
+      <div class="hr" aria-hidden="true"></div>
+
+      <div class="list-block">
+        <div class="section-title">Skills</div>
+        <div class="skills-list" aria-label="Skills">
+          <!-- app should inject preformatted HTML for skills or simple comma string -->
+          {{skills}}
+        </div>
+      </div>
+
+      <div class="hr" aria-hidden="true"></div>
+
+      <div class="list-block">
+        <div class="section-title">Education</div>
+        <!-- education placeholder expects a short HTML list or blocks -->
+        {{education}}
+      </div>
+
+      <div class="hr" aria-hidden="true"></div>
+
+      <div class="list-block">
+        <div class="section-title">Certificates</div>
+        {{certificates}}
+      </div>
+
+      <p class="small" style="margin-top:16px">Designed with ❤️ using Flare theme</p>
+    </aside>
+
+    <!-- RIGHT / MAIN CONTENT -->
+    <main class="main" role="main">
+      <div class="section">
+        <div class="section-title">Professional Summary</div>
+        <div class="summary" aria-label="Professional Summary">
+          {{summary}}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Experience</div>
+        <div class="experience" aria-live="polite">
+          <!-- experience placeholder should inject a series of .exp-item blocks
+               OR inject safe HTML markup produced by your renderer -->
+          {{experience}}
+        </div>
+      </div>
+
+      <div style="height:12px"></div>
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "student-suite2",
+          "appId": "1:1013315022277:android:adb26e66c63ab66fe7afac",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "student-suite2",
+          "configurations": {
+            "android": "1:1013315022277:android:adb26e66c63ab66fe7afac",
+            "ios": "1:1013315022277:ios:6a649f74f047de2de7afac",
+            "macos": "1:1013315022277:ios:57cf2abb10695ee8e7afac",
+            "web": "1:1013315022277:web:f7c3aad8bbafc843e7afac",
+            "windows": "1:1013315022277:web:83132590692f10c4e7afac"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "firestore": {
+    "database": "(default)",
+    "location": "us-central1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": { 
+    "rules": "storage.rules"
+  }
+}

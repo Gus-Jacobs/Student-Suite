@@ -1,0 +1,231 @@
+# codemagic.yaml
+#
+# This workflow is designed for building and publishing the iOS
+# release version of your Flutter app to App Store Connect.
+# It leverages Codemagic's automatic code signing using an App Store Connect API Key.
+
+workflows:
+  ios-release-build:
+    name: iOS Release Build
+    instance_type: mac_mini_m1 # Requires a Mac instance for iOS builds
+
+    # --- Environment Variables ---
+    environment:
+      flutter: stable         # Specifies the Flutter channel to use
+      xcode: latest           # Uses the latest available Xcode version on Codemagic
+      cocoapods: default      # Uses the default CocoaPods version
+
+      # Link the variable group where IOS_BUNDLE_ID is stored.
+      # IMPORTANT: If you are using App Store Connect API Key integration,
+      # ensure CERTIFICATE_PRIVATE_KEY is NOT set in your Codemagic UI Environment Variables.
+      groups:
+        - variables 
+
+    # --- Integrations ---
+    # This section links your workflow to the App Store Connect API Key configured in Codemagic UI.
+    # It tells Codemagic which key to use for fetching signing files and publishing.
+    integrations:
+      # !! IMPORTANT: Make sure "Admin Key" below EXACTLY matches the name
+      # of your App Store Connect API Key configured in Codemagic Integrations (the one with Admin role).
+      app_store_connect: "Admin Key" # <-- Ensure this name is correct and matches Codemagic UI
+
+    # --- Triggering ---
+    triggering:
+      branch_patterns:
+        - pattern: 'main' # Trigger this release build workflow on pushes to the 'main' branch
+          include: true
+
+    # --- Build Steps (Scripts) ---
+    scripts:
+      - name: Set up Flutter
+        script: |
+          echo "Setting up Flutter..."
+          flutter channel $FLUTTER_CHANNEL
+          flutter upgrade
+          flutter doctor
+
+      - name: Clean and Regenerate iOS Podfile
+        script: |
+          echo "Starting aggressive iOS build artifact cleanup..."
+          cd $CM_BUILD_DIR # Ensure we are at the root of the Flutter project
+
+          # Remove all potentially problematic iOS build artifacts
+          rm -rf ios/Pods/
+          rm -f ios/Podfile
+          rm -f ios/Podfile.lock
+          rm -rf ios/.symlinks/
+          rm -rf ios/Runner.xcworkspace/
+          flutter clean
+          
+          echo "Cleanup complete. Now running flutter pub get to regenerate Podfile and install pods..."
+          flutter pub get
+          echo "flutter pub get finished. Now patching Podfile..."
+          
+          echo "Patching Podfile to set iOS deployment target to 15.0..."
+          if grep -q "platform :ios," ios/Podfile; then
+              sed -i '' "s/^#* *platform :ios, '\(.*\)'/platform :ios, '15.0'/" ios/Podfile
+          else
+              sed -i '' "/# Uncomment this line to define a global platform for your project/a\platform :ios, '15.0'" ios/Podfile
+          fi
+          echo "Verifying Podfile content after patch:"
+          cat ios/Podfile | grep "platform :ios"
+          echo "Podfile patching complete."
+
+      - name: Fetch iOS signing files and get profile UUID/Cert Name
+        script: |
+          echo "Using Main App Bundle ID for signing: ${IOS_BUNDLE_ID}"
+          echo "Using Test Target Bundle ID for signing: ${IOS_BUNDLE_ID}.RunnerTests" 
+
+          echo "--- Diagnostic: Listing Certificates with the new API Key ---"
+          # This command will attempt to list your certificates.
+          # We're now using the non-deprecated command and the CORRECT 'DISTRIBUTION' type.
+          # Adding -v for verbose output.
+          app-store-connect -v certificates list --type DISTRIBUTION # <-- CRITICAL FIX HERE!
+          echo "--- End Diagnostic ---"
+
+          # Fetch iOS App Store Distribution files for the main app (for release)
+          # This command saves the profiles to a standard location and will create cert/profile if needed.
+          # Adding -v for verbose output.
+          app-store-connect -v fetch-signing-files "${IOS_BUNDLE_ID}" \
+            --type IOS_APP_STORE \
+            --create
+
+          # Fetch iOS App DEVELOPMENT files for the test target
+          # Adding -v for verbose output.
+          app-store-connect -v fetch-signing-files "${IOS_BUNDLE_ID}.RunnerTests" \
+            --type IOS_APP_DEVELOPMENT \
+            --create
+
+          # --- NEW ROBUST WAY TO GET PROFILE UUID ---
+          # Find the path of the saved App Store provisioning profile for the main app.
+          # We look for a file that contains the main bundle ID in its content (not just filename)
+          # and is an iOS App Store profile.
+          APP_STORE_PROFILE_PATH=""
+          PROVISIONING_PROFILE_DIR="/Users/builder/Library/MobileDevice/Provisioning Profiles/"
+
+          # Find all App Store profiles (based on typical naming convention)
+          for profile_file in "$PROVISIONING_PROFILE_DIR"/IOS_APP_STORE_*.mobileprovision; do
+            if [ -f "$profile_file" ]; then # Ensure it's a file
+              echo "Checking profile: $profile_file"
+              # Dump the profile content and check for BundleIdentifier and AppStore method
+              if security cms -D -i "$profile_file" 2>/dev/null | grep -q "<key>BundleIdentifier</key><string>${IOS_BUNDLE_ID}</string>"; then
+                # Assuming 'ProvisionsAllDevices' is a good indicator for App Store or Ad Hoc profiles
+                # fetched as IOS_APP_STORE type.
+                if security cms -D -i "$profile_file" 2>/dev/null | grep -q "<key>ProvisionsAllDevices</key>"; then
+                  APP_STORE_PROFILE_PATH="$profile_file"
+                  break # Found our profile, exit loop
+                fi
+              fi
+            fi
+          done
+
+          if [ -z "$APP_STORE_PROFILE_PATH" ]; then
+            echo "Error: Could not find the saved App Store provisioning profile for bundle ID ${IOS_BUNDLE_ID}. Check App Store Connect integration and bundle ID."
+            # List all profiles for debugging if it fails
+            ls -la "$PROVISIONING_PROFILE_DIR"
+            exit 1
+          fi
+          echo "Found App Store Profile Path: $APP_STORE_PROFILE_PATH"
+
+          # Extract the UUID from the .mobileprovision file using security cms
+          APP_STORE_PROFILE_UUID=$(security cms -D -i "$APP_STORE_PROFILE_PATH" | grep UUID -A 1 | grep -oE '[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}')
+
+          if [ -z "$APP_STORE_PROFILE_UUID" ]; then
+            echo "Error: Could not extract UUID from profile file: $APP_STORE_PROFILE_PATH"
+            security cms -D -i "$APP_STORE_PROFILE_PATH" # Print content for debugging
+            exit 1
+          fi
+          echo "Extracted App Store Profile UUID: $APP_STORE_PROFILE_UUID"
+
+          # Get the exact name of the iOS Distribution certificate.
+          # This assumes you have one 'Apple Distribution' certificate available.
+          # Expanded grep to also check for 'iPhone Distribution' for broader compatibility.
+          IOS_DISTRIBUTION_CERT_NAME=$(security find-identity -p codesigning -v | grep -E "Apple Distribution|iPhone Distribution" | head -1 | sed -E 's/.*"(Apple Distribution|iPhone Distribution): .*)"/\1/')
+          if [ -z "$IOS_DISTRIBUTION_CERT_NAME" ]; then
+            echo "Error: Could not find iOS Distribution certificate name. Ensure a valid 'Apple Distribution' or 'iPhone Distribution' certificate is available via your App Store Connect API Key."
+            exit 1
+          fi
+          echo "Found iOS Distribution Certificate Name: '$IOS_DISTRIBUTION_CERT_NAME'"
+
+          # Export these variables so they are available in subsequent steps in this workflow
+          echo "export APP_STORE_PROFILE_UUID=$APP_STORE_PROFILE_UUID" >> "$CM_ENV"
+          echo "export IOS_DISTRIBUTION_CERT_NAME='$IOS_DISTRIBUTION_CERT_NAME'" >> "$CM_ENV"
+
+      - name: Apply Xcode code signing settings
+        script: |
+          echo "Applying fetched code signing profiles to Xcode project and keychain..."
+          # This command ensures the fetched certificates are added to the keychain
+          # and the profiles are installed for Xcode to find.
+          keychain add-certificates # Explicitly add certificates to the keychain
+          
+          # This configures the Xcode project to use the profiles for the build.
+          xcode-project use-profiles
+
+      - name: Create ExportOptions.plist
+        script: |
+          echo "Manually creating ExportOptions.plist for App Store distribution..."
+          # Use the captured UUID and certificate name to construct the plist.
+          cat << EOF > "$CM_BUILD_DIR/ios/export_options.plist"
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store</string>
+            <key>teamID</key>
+            <string>26499NZDJJ</string> <key>uploadBitcode</key>
+            <true/>
+            <key>uploadSymbols</key>
+            <true/>
+            <key>signingCertificate</key>
+            <string>$IOS_DISTRIBUTION_CERT_NAME</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>${IOS_BUNDLE_ID}</key>
+              <string>$APP_STORE_PROFILE_UUID</string>
+            </dict>
+          </dict>
+          </plist>
+          EOF
+          echo "Generated export_options.plist content:"
+          cat "$CM_BUILD_DIR/ios/export_options.plist"
+
+      - name: Build iOS App (IPA)
+        script: |
+          echo "Starting iOS IPA build..."
+          # Build the iOS application package (IPA) for release.
+          flutter build ipa --release \
+            --obfuscate --split-debug-info=./debug_info \
+            --export-options-plist="$CM_BUILD_DIR/ios/export_options.plist" # Tell flutter build to use this plist
+          
+    # --- Artifacts ---
+    # Specifies which files to save as build artifacts after the workflow completes.
+    artifacts:
+      # This is the most common output path for flutter build ipa
+      # If your logs from 'Build iOS App (IPA)' show a different path, update this.
+      - build/ios/ipa/Runner.ipa 
+
+    # --- Publishing ---
+    # Configures post-build actions, suchs as email notifications and App Store Connect uploads.
+    publishing:
+      email:
+        recipients:
+          - pegumaxinc@gmail.com
+        notify:
+          success: true
+          failure: true
+
+      # --- App Store Connect Publishing (for iOS) ---
+      # This block uploads the generated iOS IPA to App Store Connect.
+      app_store_connect:
+        auth: integration # Uses the App Store Connect API key configured in Codemagic Integrations
+        # Uncomment the line below after you confirm the IPA is built and uploaded successfully
+        # and you're ready to test on TestFlight.
+        # submit_to_testflight: true
+        # To manage build numbers:
+        #   source: codemagic # Codemagic assigns a unique build number
+        # version_number:
+        #   source: project # Uses version from pubspec.yaml and Info.plist
+        # To automatically submit to the App Store (after TestFlight testing):
+        # submit_to_app_store: true
+        # release_type: manual # or automatic (manual is safer initially)

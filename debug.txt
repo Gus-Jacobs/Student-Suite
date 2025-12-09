@@ -1,0 +1,157 @@
+-- LLDB integration loaded --
+CLIENT OF UIKIT REQUIRES UPDATE: This process does not adopt UIScene lifecycle. This will become an assert in a future version.
+FlutterView implements focusItemsInRect: - caching for linear focus movement is limited as long as this view is on screen.
+flutter: The Dart VM service is listening on http://127.0.0.1:55028/mqs6aQDRnvg=/
+DEBUG: AppDelegate - IAP method channel registered.
+<Warning> [AppCheckCore][I-GAC004001] App Check debug token: 'C647FABD-C65A-4E17-BDD0-EFC3C77904DF'.
+Firebase App Check Debug Token: C647FABD-C65A-4E17-BDD0-EFC3C77904DF
+flutter: DEBUG (Auth): AuthProvider constructor called.
+flutter: DEBUG (Auth): AuthProvider init() called. Checking for user...
+flutter: DEBUG (Auth): User ID changed or login/logout detected. Setting isLoading=true.
+flutter: DEBUG (Auth): New user logged in: GmkDS36XoWbML4eRw6XOG6nGAJ92. Initializing user data.
+flutter: Error setting persistence: UnimplementedError: setPersistence() is only supported on web based platforms
+flutter: DEBUG (Auth): authStateChanges listener: User changed to GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Auth): Same user. Profile listener should be active.
+flutter: DEBUG (Auth): Attempting to open user-specific boxes for UID: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Auth): notes_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): flashcardDecks_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): aiTeacherSessions_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): aiInterviewSessions_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): subjects_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): tasks_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened and verified successfully. Is open: true
+flutter: DEBUG (Auth): resumeData_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): chatMessages_GmkDS36XoWbML4eRw6XOG6nGAJ92 opened successfully. Is open: true
+flutter: DEBUG (Auth): All user-specific boxes assigned and verified as open for UID: GmkDS36XoWbML4eRw6XOG6nGAJ92
+nw_endpoint_flow_failed_with_error [C4 2607:f8b0:4002:c09::5f.443 failed parent-flow (unsatisfied (No network route), ipv4, dns, proxy)] already failing, returning
+nw_connection_get_connected_socket_block_invoke [C4] Client called nw_connection_get_connected_socket on unconnected nw_connection
+TCP Conn 0x14c064280 Failed : error 0:50 [50]
+flutter: HomeScreen: isCalendarView (from plannerState) = false. Selected Index: 0
+flutter: PlannerScreenState: Building. Current _isCalendarView: false
+flutter: PlannerScreenState: _buildCalendarOverlay is building. _isCalendarView: false, ignoring: true, opacity: 0.0
+flutter: DEBUG (Flutter): SubscriptionProvider.update() called.
+flutter: DEBUG (Flutter): Cancelling all subscription streams.
+flutter: DEBUG (Flutter): Resetting Pro status and clearing subscription state.
+flutter: DEBUG (Flutter): Pro status and subscription state fully reset.
+flutter: DEBUG (Flutter): loadSubscriptionStatus called with user: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Flutter): Setting up NEW user subscription listener for UID: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Flutter): Requesting IAP products...
+App is being debugged, do not track this hang
+Hang detected: 0.81s (debugger attached, not reporting)
+flutter: DEBUG (Auth): User profile snapshot received for UID: GmkDS36XoWbML4eRw6XOG6nGAJ92. Data exists: true
+flutter: DEBUG (Flutter): User GmkDS36XoWbML4eRw6XOG6nGAJ92 - productId: null, expiry: null, isStripePro: false -> _isPro: false
+flutter: PlannerScreenState: _buildCalendarOverlay is building. _isCalendarView: false, ignoring: true, opacity: 0.0
+flutter: DEBUG (Auth): Custom claim isPro: false
+flutter: DEBUG (Auth): _profileLoadCompleter completed by listener.
+flutter: DEBUG (Flutter): SubscriptionProvider.update() called.
+flutter: DEBUG (Flutter): loadSubscriptionStatus called with user: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Flutter): Subscription listener already active for UID: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: HomeScreen: isCalendarView (from plannerState) = false. Selected Index: 0
+flutter: DEBUG (Flutter): Requesting IAP products...
+flutter: PlannerScreenState: Building. Current _isCalendarView: false
+flutter: PlannerScreenState: _buildCalendarOverlay is building. _isCalendarView: false, ignoring: true, opacity: 0.0
+flutter: DEBUG (Flutter): User GmkDS36XoWbML4eRw6XOG6nGAJ92 - productId: null, expiry: null, isStripePro: false -> _isPro: false
+flutter: PlannerScreenState: Building. Current _isCalendarView: false
+flutter: PlannerScreenState: _buildCalendarOverlay is building. _isCalendarView: false, ignoring: true, opacity: 0.0
+flutter: PlannerScreenState: Building. Current _isCalendarView: false
+flutter: PlannerScreenState: _buildCalendarOverlay is building. _isCalendarView: false, ignoring: true, opacity: 0.0
+flutter: DEBUG (Flutter): ProductDetailsResponse -> products=1, notFoundIDs=[], error=null
+flutter: DEBUG (Flutter): Successfully fetched products.
+flutter: DEBUG (Flutter): Product -> id=com.pegumax.studentsuite.pro.monthly, title=Student Suite Pro Monthly, price=$12.99
+flutter: DEBUG (Flutter): ProductDetailsResponse -> products=1, notFoundIDs=[], error=null
+flutter: DEBUG (Flutter): Successfully fetched products.
+flutter: DEBUG (Flutter): Product -> id=com.pegumax.studentsuite.pro.monthly, title=Student Suite Pro Monthly, price=$12.99
+nw_protocol_socket_set_no_wake_from_sleep [C1.1.1.1.1:4] setsockopt SO_NOWAKEFROMSLEEP failed [22: Invalid argument]
+nw_protocol_socket_set_no_wake_from_sleep setsockopt SO_NOWAKEFROMSLEEP failed [22: Invalid argument]
+flutter: HomeScreen: Bottom nav index changed to 3
+flutter: HomeScreen: isCalendarView (from plannerState) = false. Selected Index: 3
+flutter: DEBUG (Flutter): loadSubscriptionStatus called with user: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Flutter): Subscription listener already active for UID: GmkDS36XoWbML4eRw6XOG6nGAJ92
+flutter: DEBUG (Flutter): User GmkDS36XoWbML4eRw6XOG6nGAJ92 - productId: null, expiry: null, isStripePro: false -> _isPro: false
+flutter: DEBUG (Flutter): Initiating purchase for product id: com.pegumax.studentsuite.pro.monthly
+App is being debugged, do not track this hang
+Hang detected: 0.43s (debugger attached, not reporting)
+flutter: DEBUG (Flutter): _iap.buyNonConsumable returned -> true
+flutter: DEBUG (Flutter): Starting purchase watchdog (30s).
+flutter: DEBUG (Flutter): Purchase watchdog fired — starting diagnostic attempt.
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: start
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: calling restorePurchases to prompt platform.
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: invoking getAppStoreReceipt()
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: got native receipt (len=336628).
+flutter: DEBUG (Flutter): _attemptBackendVerify: calling processIAPReceipt (platform=app_store, receiptLen=336628).
+GTMSessionFetcher 0x14cc66a80 (https://us-central1-student-suite-9ae1d.cloudfunctions.net/processIAPReceipt) was already running
+nw_protocol_socket_set_no_wake_from_sleep [C8.1.1.1.1:4] setsockopt SO_NOWAKEFROMSLEEP failed [22: Invalid argument]
+nw_protocol_socket_set_no_wake_from_sleep setsockopt SO_NOWAKEFROMSLEEP failed [22: Invalid argument]
+Task <868AFBAA-9A46-407C-BE49-3887429D96CA>.<1> HTTP load failed, 339375/0 bytes (error code: -1005 [4:-4])
+Task <868AFBAA-9A46-407C-BE49-3887429D96CA>.<1> finished with error [-1005] Error Domain=NSURLErrorDomain Code=-1005 "The network connection was lost." UserInfo={_kCFStreamErrorCodeKey=-4, NSUnderlyingError=0x14bbbf150 {Error Domain=kCFErrorDomainCFNetwork Code=-1005 "(null)" UserInfo={NSErrorPeerAddressKey=<CFData 0x14c073780 [0x2074af9e8]>{length = 28, capacity = 28, bytes = 0x1c1e1f40000000000000000000000000 ... 0000000100000000}, _kCFStreamErrorCodeKey=-4, _kCFStreamErrorDomainKey=4}}, _NSURLErrorFailingURLSessionTaskErrorKey=LocalDataTask <868AFBAA-9A46-407C-BE49-3887429D96CA>.<1>, _NSURLErrorRelatedURLSessionTaskErrorKey=(
+    "LocalDataTask <868AFBAA-9A46-407C-BE49-3887429D96CA>.<1>"
+), NSLocalizedDescription=The network connection was lost., NSErrorFailingURLStringKey=https://us-central1-student-suite-9ae1d.cloudfunctions.net/processIAPReceipt, NSErrorFailingURLKey=https://us-central1-student-suite-9ae1d.cloudfunctions.net/processIAPReceipt, _kCFStreamErrorDomainKey=4}
+flutter: DEBUG (Flutter): _attemptBackendVerify: exception calling processIAPReceipt: [firebase_functions/unknown] The network connection was lost.
+flutter:
+flutter: #0      CloudFunctionsHostApi.call (package:cloud_functions_platform_interface/src/pigeon/messages.pigeon.dart:84:7)
+flutter: <asynchronous suspension>
+flutter: #1      MethodChannelHttpsCallable.call (package:cloud_functions_platform_interface/src/method_channel/method_channel_https_callable.dart:33:24)
+flutter: <asynchronous suspension>
+flutter: #2      HttpsCallable.call (package:cloud_functions/src/https_callable.dart:49:37)
+flutter: <asynchronous suspension>
+flutter: #3      SubscriptionProvider._attemptBackendVerify (package:student_suite/providers/subscription_provider.dart:319:22)
+flutter: <asynchronous suspension>
+flutter: #4      SubscriptionProvider._diagnoseStuckPurchase (package:student_suite/providers/subscription_provider.dart:194:13)
+flutter: <asynchronous suspension>
+flutter: #5      SubscriptionProvider._startPurchaseWatchdog.<anonymous closure>.<anonymous closure> (package:student_suite/providers/subscription_provider.dart:129:45)
+flutter: <asynchronous suspension>
+flutter:
+flutter: #0      CloudFunctionsHostApi.call (package:cloud_functions_platform_interface/src/pigeon/messages.pigeon.dart:84:7)
+flutter: <asynchronous suspension>
+flutter: #1      MethodChannelHttpsCallable.call (package:cloud_functions_platform_interface/src/method_channel/method_channel_https_callable.dart:33:24)
+flutter: <asynchronous suspension>
+flutter: #2      HttpsCallable.call (package:cloud_functions/src/https_callable.dart:49:37)
+flutter: <asynchronous suspension>
+flutter: #3      SubscriptionProvider._attemptBackendVerify (package:student_suite/providers/subscription_provider.dart:319:22)
+flutter: <asynchronous suspension>
+flutter: #4      SubscriptionProvider._diagnoseStuckPurchase (package:student_suite/providers/subscription_provider.dart:194:13)
+flutter: <asynchronous suspension>
+flutter: #5      SubscriptionProvider._startPurchaseWatchdog.<anonymous closure>.<anonymous closure> (package:student_suite/providers/subscription_provider.dart:129:45)
+flutter: <asynchronous suspension>
+flutter:
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: end
+flutter: DEBUG (Flutter): Purchase watchdog diagnostic completed — clearing UI.
+flutter: DEBUG (Flutter): Initiating purchase for product id: com.pegumax.studentsuite.pro.monthly
+flutter: DEBUG (Flutter): _iap.buyNonConsumable returned -> true
+flutter: DEBUG (Flutter): Purchase watchdog cancelled.
+flutter: DEBUG (Flutter): Starting purchase watchdog (30s).
+flutter: DEBUG (Flutter): Purchase watchdog fired — starting diagnostic attempt.
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: start
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: calling restorePurchases to prompt platform.
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: invoking getAppStoreReceipt()
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: got native receipt (len=336628).
+flutter: DEBUG (Flutter): _attemptBackendVerify: calling processIAPReceipt (platform=app_store, receiptLen=336628).
+flutter: DEBUG (Flutter): _attemptBackendVerify: exception calling processIAPReceipt: [firebase_functions/invalid-argument] Apple verification failed with status 21003
+flutter:
+flutter: #0      CloudFunctionsHostApi.call (package:cloud_functions_platform_interface/src/pigeon/messages.pigeon.dart:84:7)
+flutter: <asynchronous suspension>
+flutter: #1      MethodChannelHttpsCallable.call (package:cloud_functions_platform_interface/src/method_channel/method_channel_https_callable.dart:33:24)
+flutter: <asynchronous suspension>
+flutter: #2      HttpsCallable.call (package:cloud_functions/src/https_callable.dart:49:37)
+flutter: <asynchronous suspension>
+flutter: #3      SubscriptionProvider._attemptBackendVerify (package:student_suite/providers/subscription_provider.dart:319:22)
+flutter: <asynchronous suspension>
+flutter: #4      SubscriptionProvider._diagnoseStuckPurchase (package:student_suite/providers/subscription_provider.dart:194:13)
+flutter: <asynchronous suspension>
+flutter: #5      SubscriptionProvider._startPurchaseWatchdog.<anonymous closure>.<anonymous closure> (package:student_suite/providers/subscription_provider.dart:129:45)
+flutter: <asynchronous suspension>
+flutter:
+flutter: #0      CloudFunctionsHostApi.call (package:cloud_functions_platform_interface/src/pigeon/messages.pigeon.dart:84:7)
+flutter: <asynchronous suspension>
+flutter: #1      MethodChannelHttpsCallable.call (package:cloud_functions_platform_interface/src/method_channel/method_channel_https_callable.dart:33:24)
+flutter: <asynchronous suspension>
+flutter: #2      HttpsCallable.call (package:cloud_functions/src/https_callable.dart:49:37)
+flutter: <asynchronous suspension>
+flutter: #3      SubscriptionProvider._attemptBackendVerify (package:student_suite/providers/subscription_provider.dart:319:22)
+flutter: <asynchronous suspension>
+flutter: #4      SubscriptionProvider._diagnoseStuckPurchase (package:student_suite/providers/subscription_provider.dart:194:13)
+flutter: <asynchronous suspension>
+flutter: #5      SubscriptionProvider._startPurchaseWatchdog.<anonymous closure>.<anonymous closure> (package:student_suite/providers/subscription_provider.dart:129:45)
+flutter: <asynchronous suspension>
+flutter:
+flutter: DEBUG (Flutter): _diagnoseStuckPurchase: end
+flutter: DEBUG (Flutter): Purchase watchdog diagnostic completed — clearing UI.

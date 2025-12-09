@@ -1,0 +1,10 @@
+{
+  "apple_iap": {
+    "issuer_id": "71ef113f-fc84-40a8-9ad5-07c93f995c81",
+    "private_key": "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgYkTXFbbYhHSGTsI4\nPfti6zY1sOAO9aZ3YH4uKzKQeCOgCgYIKoZIzj0DAQehRANCAATzGTWRruEgR5j4\n/gtT8NurMyeTfg5f59ugrGvcDVrjXVSbSbXTuJs9MgUg3ZK7lCK+TVMaK2Sb2WHD\nqSXClatr",
+    "key_id": "GZC69559H9"
+  },
+  "iap": {
+    "apple_shared_secret": "77d0043c383f4fe48502f63d4176f966"
+  }
+}

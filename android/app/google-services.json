@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1013315022277",
+    "project_id": "student-suite2",
+    "storage_bucket": "student-suite2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013315022277:android:adb26e66c63ab66fe7afac",
+        "android_client_info": {
+          "package_name": "com.pegumax.studentsuite"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArFhh9b4WPdHuL65aOWtABOWaFAR535sg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

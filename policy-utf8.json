@@ -1,0 +1,177 @@
+﻿{
+  "bindings": [
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-artifactregistry.iam.gserviceaccount.com"
+      ],
+      "role": "roles/artifactregistry.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:749555197585@cloudbuild.gserviceaccount.com"
+      ],
+      "role": "roles/cloudbuild.builds.builder"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+      ],
+      "role": "roles/cloudbuild.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcf-admin-robot.iam.gserviceaccount.com"
+      ],
+      "role": "roles/cloudfunctions.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-cloudscheduler.iam.gserviceaccount.com"
+      ],
+      "role": "roles/cloudscheduler.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@compute-system.iam.gserviceaccount.com"
+      ],
+      "role": "roles/compute.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@containerregistry.iam.gserviceaccount.com"
+      ],
+      "role": "roles/containerregistry.ServiceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:749555197585@cloudservices.gserviceaccount.com",
+        "serviceAccount:student-suite-9ae1d@appspot.gserviceaccount.com"
+      ],
+      "role": "roles/editor"
+    },
+    {
+      "members": [
+        "serviceAccount:compute@student-suite-9ae1d.iam.gserviceaccount.com"
+      ],
+      "role": "roles/eventarc.eventReceiver"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-eventarc.iam.gserviceaccount.com"
+      ],
+      "role": "roles/eventarc.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:play-developer-api-access@student-suite-9ae1d.iam.gserviceaccount.com"
+      ],
+      "role": "roles/firebase.developAdmin"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-firebase.iam.gserviceaccount.com"
+      ],
+      "role": "roles/firebase.managementServiceAgent"
+    },
+    {
+      "members": [
+        "deleted:serviceAccount:firebase-adminsdk-fbsvc@student-suite-9ae1d.iam.gserviceaccount.com?uid=102699161846812612958"
+      ],
+      "role": "roles/firebase.sdkAdminServiceAgent"
+    },
+    {
+      "members": [
+        "deleted:serviceAccount:firebase-adminsdk-fbsvc@student-suite-9ae1d.iam.gserviceaccount.com?uid=102699161846812612958"
+      ],
+      "role": "roles/firebaseappcheck.admin"
+    },
+    {
+      "members": [
+        "deleted:serviceAccount:firebase-adminsdk-fbsvc@student-suite-9ae1d.iam.gserviceaccount.com?uid=102699161846812612958"
+      ],
+      "role": "roles/firebaseauth.admin"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-firebasemods.iam.gserviceaccount.com"
+      ],
+      "role": "roles/firebasemods.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@firebase-rules.iam.gserviceaccount.com"
+      ],
+      "role": "roles/firebaserules.system"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-firebasestorage.iam.gserviceaccount.com"
+      ],
+      "role": "roles/firebasestorage.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@gcp-sa-firestore.iam.gserviceaccount.com"
+      ],
+      "role": "roles/firestore.serviceAgent"
+    },
+    {
+      "members": [
+        "deleted:serviceAccount:firebase-adminsdk-fbsvc@student-suite-9ae1d.iam.gserviceaccount.com?uid=102699161846812612958",
+        "serviceAccount:service-749555197585@gcp-sa-pubsub.iam.gserviceaccount.com"
+      ],
+      "role": "roles/iam.serviceAccountTokenCreator"
+    },
+    {
+      "members": [
+        "serviceAccount:compute@student-suite-9ae1d.iam.gserviceaccount.com",
+        "serviceAccount:play-iap-verifier@student-suite-9ae1d.iam.gserviceaccount.com"
+      ],
+      "role": "roles/iam.serviceAccountUser"
+    },
+    {
+      "members": [
+        "user:bumblebees480@gmail.com"
+      ],
+      "role": "roles/owner"
+    },
+    {
+      "members": [
+        "serviceAccount:play-iap-verifier@student-suite-9ae1d.iam.gserviceaccount.com"
+      ],
+      "role": "roles/pubsub.subscriber"
+    },
+    {
+      "members": [
+        "serviceAccount:compute@student-suite-9ae1d.iam.gserviceaccount.com"
+      ],
+      "role": "roles/run.invoker"
+    },
+    {
+      "members": [
+        "serviceAccount:service-749555197585@serverless-robot-prod.iam.gserviceaccount.com"
+      ],
+      "role": "roles/run.serviceAgent"
+    },
+    {
+      "members": [
+        "serviceAccount:student-suite-9ae1d@appspot.gserviceaccount.com"
+      ],
+      "role": "roles/secretmanager.secretAccessor"
+    },
+    {
+      "members": [
+        "deleted:serviceAccount:firebase-adminsdk-fbsvc@student-suite-9ae1d.iam.gserviceaccount.com?uid=102699161846812612958"
+      ],
+      "role": "roles/storage.admin"
+    },
+    {
+      "members": [
+        "serviceAccount:play-iap-verifier@student-suite-9ae1d.iam.gserviceaccount.com"
+      ],
+      "role": "roles/viewer"
+    }
+  ],
+  "etag": "BwZB7YfWWzY=",
+  "version": 1
+}
