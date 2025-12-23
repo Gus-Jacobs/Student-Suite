@@ -18,8 +18,10 @@ const String _kStripeStandardPriceId = 'price_1RpIkuAt2vKSOayIyqw5nZnO';
 
 const String _kStripeReferralCouponId =
     'referral-bonus'; // Must match the ID you create in Stripe Dashboard
-// IAP product ID
-const String _kProSubscriptionId = 'com.pegumax.studentsuite.pro.monthly';
+const String _kAndroidStandardSubscriptionId = 'com.pegumax.studentsuite.pro.monthly';
+// iOS Standard (New Name)
+const String _kIOSStandardSubscriptionId = 'com.pegumax.studentsuite.pro.standard';
+// Founder (Shared)
 const String _kFounderSubscriptionId = 'com.pegumax.studentsuite.pro.founder';
 // Platform channel to native iOS helper
 const MethodChannel _kIapMethodChannel = MethodChannel('com.pegumax.iap');
@@ -34,6 +36,7 @@ class SubscriptionProvider extends ChangeNotifier {
   String? _referralCode;
 
   bool _hasReferral = false;
+  bool _isVerifying = false;
 
   bool _isPro = false;
   bool get isPro => _isPro;
@@ -116,6 +119,9 @@ class SubscriptionProvider extends ChangeNotifier {
   bool get _isAndroidPlatform =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
+  String get _platformStandardId =>
+      _isIOSPlatform ? _kIOSStandardSubscriptionId : _kAndroidStandardSubscriptionId;
+
   SubscriptionProvider() {
     // Guard attaching to native purchase stream on web or unsupported
     // environments. The in_app_purchase plugin can throw during
@@ -162,7 +168,7 @@ class SubscriptionProvider extends ChangeNotifier {
     // This catches any purchases that were missed or made on another device.
     try {
       debugPrint("DEBUG (Flutter): Calling restorePurchases() on init.");
-      await _iap.restorePurchases();
+      await restorePurchases(silent: true);
     } catch (e) {
       debugPrint("DEBUG (Flutter): Initial restorePurchases() failed: $e");
       // Don't block the app, just log it.
@@ -201,9 +207,12 @@ class SubscriptionProvider extends ChangeNotifier {
             'DEBUG (Flutter): Purchase watchdog diagnostic completed — clearing UI.');
         _isLoading = false;
         _processingPurchase = false;
-        _purchaseError ??=
+        if(!_isPro){
+          _purchaseError ??=
             "No purchase response from platform. Please try again or use Restore Purchases.";
         _showRestoreButton = true;
+        }
+        
         notifyListeners();
       });
     });
@@ -226,7 +235,7 @@ class SubscriptionProvider extends ChangeNotifier {
     try {
       // 1) Quick diagnostic: check cached verificationData on any recent PurchaseDetails
       try {
-        final cached = _restoredReceipts[_kProSubscriptionId];
+        final cached = _restoredReceipts[_platformStandardId];
         if (cached != null && cached.trim().isNotEmpty) {
           debugPrint(
               'DEBUG (Flutter): _diagnoseStuckPurchase: using cached restored receipt (len=${cached.length}).');
@@ -288,7 +297,7 @@ class SubscriptionProvider extends ChangeNotifier {
       // 4) Android: try to inspect verificationData from any recent purchase if possible (best-effort)
       if (_isAndroidPlatform) {
         try {
-          final cached = _restoredReceipts[_kProSubscriptionId];
+          final cached = _restoredReceipts[_platformStandardId];
           if (cached != null && cached.trim().isNotEmpty) {
             debugPrint(
                 'DEBUG (Flutter): _diagnoseStuckPurchase: Android using cached receipt.');
@@ -370,59 +379,165 @@ class SubscriptionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // NEW helper: try to call the backend verification callable so you get server logs
   Future<void> _attemptBackendVerify(String receipt,
-      {required String platform}) async {
+      {required String platform, String? productId}) async {
     if (_user == null) {
-      debugPrint(
-          'DEBUG (Flutter): _attemptBackendVerify: no authenticated user; skipping backend call.');
+      debugPrint('DEBUG (Flutter): _attemptBackendVerify: no authenticated user; skipping.');
       return;
     }
 
-    try {
-      debugPrint(
-          'DEBUG (Flutter): _attemptBackendVerify: calling processIAPReceipt (platform=$platform, receiptLen=${receipt.length}).');
-      final verifyPurchaseFn =
-          FirebaseFunctions.instance.httpsCallable('processIAPReceipt');
-      final result = await verifyPurchaseFn.call(<String, dynamic>{
-        'receiptData': receipt,
-        'userId': _user!.uid,
-        'productId': _kProSubscriptionId,
-        'source': platform,
-      });
-
-      final data = result.data as Map<String, dynamic>?;
-      debugPrint(
-          'DEBUG (Flutter): _attemptBackendVerify: backend response -> $data');
-
-      if (data != null && data['success'] == true) {
-        debugPrint(
-            'DEBUG (Flutter): _attemptBackendVerify: verification success — updating local state.');
-        _isPro = true;
-        _showRestoreButton = false;
-        _purchaseError = null;
-        await saveSubscriptionStatus(
-            platform: platform, productId: _kProSubscriptionId);
-      } else {
-        final backendError =
-            data?['error'] ?? 'verification failed or returned false';
-        debugPrint(
-            'DEBUG (Flutter): _attemptBackendVerify: backend verification failed -> $backendError');
-        _purchaseError = 'Verification failed: $backendError';
-        _showRestoreButton = true;
-      }
-    } catch (e, st) {
-      debugPrint(
-          'DEBUG (Flutter): _attemptBackendVerify: exception calling processIAPReceipt: $e\n$st');
-      _purchaseError = 'Error verifying purchase. See logs.';
-      _showRestoreButton = true;
-    } finally {
-      // ensure UI updated
-      _isLoading = false;
-      _processingPurchase = false;
-      notifyListeners();
+    if (_isVerifying) {
+      debugPrint('DEBUG (Flutter): Already verifying. Skipping duplicate request.');
+      return;
     }
+    _isVerifying = true;
+    
+    final actualProductId = productId ?? _platformStandardId;
+    final verifyPurchaseFn = FirebaseFunctions.instance.httpsCallable('processIAPReceipt');
+    
+    int attempts = 0;
+    const int maxAttempts = 12; // Give it 60+ seconds if needed
+    
+    while (attempts < maxAttempts) {
+      attempts++;
+      try {
+        debugPrint('DEBUG (Flutter): _attemptBackendVerify (Attempt $attempts/$maxAttempts)...');
+        
+        final result = await verifyPurchaseFn.call(<String, dynamic>{
+          'receiptData': receipt,
+          'userId': _user!.uid,
+          'productId': actualProductId,
+          'source': platform,
+        });
+
+        final data = result.data as Map<String, dynamic>?;
+
+        if (data != null && data['success'] == true) {
+          debugPrint('DEBUG (Flutter): Verification success!');
+          _isPro = true;
+          _showRestoreButton = false;
+          _purchaseError = null;
+          await saveSubscriptionStatus(platform: platform, productId: actualProductId);
+          _isLoading = false;
+          notifyListeners();
+          return; 
+        } else {
+          // Soft failure inside "success: false" response
+          throw FirebaseFunctionsException(
+              message: data?['error'] ?? 'Unknown error',
+              code: 'internal'); 
+        }
+      } catch (e) {
+        final errorString = e.toString();
+        debugPrint('DEBUG (Flutter): Verify Exception: $errorString');
+
+        // --- NEW: Handle 21002 (Malformed Receipt) by Refreshing ---
+        if (errorString.contains('21002')) {
+           debugPrint('DEBUG (Flutter): Error 21002 detected. Receipt is corrupt. Refreshing...');
+           try {
+             // 1. Force Apple to download a new receipt
+             await _kIapMethodChannel.invokeMethod('refreshAppStoreReceipt');
+             // 2. Fetch the new data
+             final newReceipt = await _kIapMethodChannel.invokeMethod<String>('getAppStoreReceipt');
+             // 3. Update the receipt variable for the NEXT attempt
+             if (newReceipt != null) {
+               receipt = newReceipt;
+               debugPrint('DEBUG (Flutter): Receipt refreshed successfully. Retrying immediately.');
+               // Don't wait, retry now with good data
+               continue; 
+             }
+           } catch (refreshError) {
+             debugPrint("DEBUG (Flutter): Failed to refresh receipt: $refreshError");
+           }
+        }
+        // -----------------------------------------------------------
+
+        // Handle 21105 (Server Down)
+        if (errorString.contains('21105') || 
+            errorString.contains('temporary') || 
+            errorString.contains('unavailable')) {
+              
+          debugPrint('DEBUG (Flutter): Sandbox 21105 detected. Waiting 5s...');
+          if (attempts >= maxAttempts) {
+            _purchaseError = 'Apple server is busy. Please try "Restore Purchases".';
+            _showRestoreButton = true;
+            break;
+          }
+          await Future.delayed(const Duration(seconds: 5));
+          continue; 
+        }
+
+        // Hard failure
+        if (attempts >= maxAttempts) {
+           _purchaseError = 'Verification failed: $errorString';
+           _showRestoreButton = true;
+           break;
+        }
+        await Future.delayed(const Duration(seconds: 2));
+      }finally {
+        _isVerifying = false; // RELEASE THE LOCK
+        _isLoading = false;
+        notifyListeners();
+      }
+    }
+    
+    _isLoading = false;
+    notifyListeners();
   }
+
+  // NEW helper: try to call the backend verification callable so you get server logs
+  // Future<void> _attemptBackendVerify(String receipt,
+  //     {required String platform, String? productId}) async {
+  //   if (_user == null) {
+  //     debugPrint(
+  //         'DEBUG (Flutter): _attemptBackendVerify: no authenticated user; skipping backend call.');
+  //     return;
+  //   }
+  //   final actualProductId = productId ?? _platformStandardId;
+  //   try {
+  //     debugPrint(
+  //         'DEBUG (Flutter): _attemptBackendVerify: calling processIAPReceipt (platform=$platform, receiptLen=${receipt.length}, id=$actualProductId).');
+  //     final verifyPurchaseFn =
+  //         FirebaseFunctions.instance.httpsCallable('processIAPReceipt');
+  //     final result = await verifyPurchaseFn.call(<String, dynamic>{
+  //       'receiptData': receipt,
+  //       'userId': _user!.uid,
+  //       'productId': actualProductId,
+  //       'source': platform,
+  //     });
+
+  //     final data = result.data as Map<String, dynamic>?;
+  //     debugPrint(
+  //         'DEBUG (Flutter): _attemptBackendVerify: backend response -> $data');
+
+  //     if (data != null && data['success'] == true) {
+  //       debugPrint(
+  //           'DEBUG (Flutter): _attemptBackendVerify: verification success — updating local state.');
+  //       _isPro = true;
+  //       _showRestoreButton = false;
+  //       _purchaseError = null;
+  //       await saveSubscriptionStatus(
+  //           platform: platform, productId: actualProductId);
+  //     } else {
+  //       final backendError =
+  //           data?['error'] ?? 'verification failed or returned false';
+  //       debugPrint(
+  //           'DEBUG (Flutter): _attemptBackendVerify: backend verification failed -> $backendError');
+  //       _purchaseError = 'Verification failed: $backendError';
+  //       _showRestoreButton = true;
+  //     }
+  //   } catch (e, st) {
+  //     debugPrint(
+  //         'DEBUG (Flutter): _attemptBackendVerify: exception calling processIAPReceipt: $e\n$st');
+  //     _purchaseError = 'Error verifying purchase. See logs.';
+  //     _showRestoreButton = true;
+  //   } finally {
+  //     // ensure UI updated
+  //     _isLoading = false;
+  //     _processingPurchase = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   // Single listener for purchase updates (clean implementation)
   void _listenToPurchaseUpdated() {
@@ -527,7 +642,7 @@ class SubscriptionProvider extends ChangeNotifier {
               try {
                 if (receiptToVerify.isNotEmpty) {
                   await _attemptBackendVerify(receiptToVerify,
-                      platform: platform);
+                      platform: platform, productId: purchaseDetails.productID);
                 } else {
                   debugPrint(
                       'DEBUG (Flutter): No server receipt available; attempting alternate verification.');
@@ -673,7 +788,7 @@ class SubscriptionProvider extends ChangeNotifier {
       _purchaseError = null;
       notifyListeners();
 
-      const Set<String> ids = {_kProSubscriptionId, _kFounderSubscriptionId};
+      final Set<String> ids = {_platformStandardId, _kFounderSubscriptionId};
       final ProductDetailsResponse response =
           await _iap.queryProductDetails(ids);
 
@@ -729,7 +844,7 @@ class SubscriptionProvider extends ChangeNotifier {
   }
 
   Future<void> _handleSuccessfulPurchase(
-      PurchaseDetails purchaseDetails) async {
+      PurchaseDetails purchaseDetails, {bool silent = false}) async {
     debugPrint(
         "DEBUG (Flutter): Handling successful purchase for product: ${purchaseDetails.productID}");
 
@@ -750,24 +865,45 @@ class SubscriptionProvider extends ChangeNotifier {
 
     try {
       if (_isIOSPlatform) {
-        if (purchaseDetails
-            .verificationData.serverVerificationData.isNotEmpty) {
+        // if (purchaseDetails
+        //     .verificationData.serverVerificationData.isNotEmpty) {
+        //   receiptData = purchaseDetails.verificationData.serverVerificationData;
+        //   debugPrint("DEBUG (Flutter): Using serverVerificationData (iOS).");
+        // }
+        
+        // if (receiptData == null || receiptData.trim().isEmpty) {
+        //   receiptData = await _kIapMethodChannel
+        //       .invokeMethod<String>('getAppStoreReceipt');
+        //   debugPrint(
+        //       "DEBUG (Flutter): Using native App Store receipt (cached).");
+        // }
+        // if (receiptData == null ||
+        //     receiptData.trim().isEmpty ||
+        //     !_isValidBase64(receiptData)) {
+        //   debugPrint(
+        //       "DEBUG (Flutter): Forcing refresh of App Store receipt...");
+        //   receiptData = await _kIapMethodChannel
+        //       .invokeMethod<String>('refreshAppStoreReceipt');
+        // }
+        // FIX: Always fetch the native receipt on iOS. 
+        // The plugin's serverVerificationData is often unreliable or malformed on iOS.
+        try {
+          debugPrint("DEBUG (Flutter): Fetching native AppStore receipt for validation.");
+          receiptData = await _kIapMethodChannel.invokeMethod<String>('getAppStoreReceipt');
+        } catch (e) {
+          debugPrint("DEBUG (Flutter): Failed to fetch native receipt: $e");
+          // Fallback to plugin data only if native fails
           receiptData = purchaseDetails.verificationData.serverVerificationData;
-          debugPrint("DEBUG (Flutter): Using serverVerificationData (iOS).");
         }
+
+        // If still empty/null, try to refresh
         if (receiptData == null || receiptData.trim().isEmpty) {
-          receiptData = await _kIapMethodChannel
-              .invokeMethod<String>('getAppStoreReceipt');
-          debugPrint(
-              "DEBUG (Flutter): Using native App Store receipt (cached).");
-        }
-        if (receiptData == null ||
-            receiptData.trim().isEmpty ||
-            !_isValidBase64(receiptData)) {
-          debugPrint(
-              "DEBUG (Flutter): Forcing refresh of App Store receipt...");
-          receiptData = await _kIapMethodChannel
-              .invokeMethod<String>('refreshAppStoreReceipt');
+          debugPrint("DEBUG (Flutter): Native receipt empty. Attempting refresh...");
+          try {
+             receiptData = await _kIapMethodChannel.invokeMethod<String>('refreshAppStoreReceipt');
+          } catch (e) {
+             debugPrint("DEBUG (Flutter): Refresh failed: $e");
+          }
         }
       } else if (_isAndroidPlatform) {
         // FIX: Always prioritize localVerificationData on Android
@@ -827,25 +963,29 @@ class SubscriptionProvider extends ChangeNotifier {
       } else {
         final backendError = data?['error'] ?? "Purchase validation failed.";
         debugPrint("DEBUG (Flutter): Validation failed: $backendError");
-        if (!_isPro) {
-          _isPro = false;
-          _purchaseError = ErrorUtils.getFriendlyMessage(
-            backendError,
-            context: "subscription",
-          );
-          _showRestoreButton = true;
+        if(!silent){
+          if (!_isPro) {
+            _isPro = false;
+            _purchaseError = ErrorUtils.getFriendlyMessage(
+              backendError,
+              context: "subscription",
+            );
+            _showRestoreButton = true;
+          }
         }
       }
     } catch (e, st) {
       debugPrint(
           "DEBUG (Flutter): Exception during purchase validation: $e\n$st");
-      if (!_isPro) {
-        _isPro = false;
-        _purchaseError = ErrorUtils.getFriendlyMessage(
-          "Error validating purchase: $e",
-          context: "subscription",
-        );
-        _showRestoreButton = true;
+      if(!silent){
+        if (!_isPro) {
+          _isPro = false;
+          _purchaseError = ErrorUtils.getFriendlyMessage(
+            "Error validating purchase: $e",
+            context: "subscription",
+          );
+          _showRestoreButton = true;
+        }
       }
     } finally {
       _isLoading = false;
@@ -856,13 +996,28 @@ class SubscriptionProvider extends ChangeNotifier {
 
   String? _normalizePossibleWrappedReceipt(String? raw) {
     if (raw == null) return null;
-    String s = raw.trim();
+    String s = raw.replaceAll(RegExp(r'\s+'), '');
 
+    // 1. Strip surrounding quotes if present (common artifact)
+    if (s.startsWith('"') && s.endsWith('"') && s.length > 1) {
+      s = s.substring(1, s.length - 1);
+    }
+
+    // 2. If it looks like a clean Base64 string (no curly braces, no dots), JUST RETURN IT.
+    // iOS receipts are often just long Base64 strings. Normalizing them further breaks them.
+    if (!s.startsWith('{') && !s.contains('.')) {
+      return s;
+    }
+
+    // 3. Only if it looks like JSON, try to parse it (Legacy Android/Flutter wrapper)
     if (s.startsWith('{')) {
       try {
         final parsed = json.decode(s);
         if (parsed is Map) {
+          // Check common wrapper keys
           for (final key in [
+            'serverVerificationData', // <--- ADDED THIS (common flutter key)
+            'localVerificationData',
             'data',
             'receipt',
             'signedTransactionInfo',
@@ -872,55 +1027,28 @@ class SubscriptionProvider extends ChangeNotifier {
             if (parsed.containsKey(key) && parsed[key] is String) {
               final candidate = (parsed[key] as String).trim();
               if (candidate.isNotEmpty) {
-                s = candidate;
-                break;
+                return candidate; // Found it, return immediately
               }
             }
           }
         }
+      } catch (_) {
+        // Not valid JSON, ignore and continue
+      }
+    }
+
+    // 4. JWT Fallback (Android sometimes)
+    if (s.contains('.')) {
+      try {
+        final parts = s.split('.');
+        if (parts.length >= 2) {
+            // ... (Your existing JWT logic can stay here if you want, 
+            // but for iOS receipts, we usually don't reach here) ...
+        }
       } catch (_) {}
     }
 
-    if (s.startsWith('"') && s.endsWith('"') && s.length > 1) {
-      s = s.substring(1, s.length - 1);
-    }
-
-    if (s.contains('.')) {
-      final parts = s.split('.');
-      if (parts.length >= 2) {
-        try {
-          String payloadPart = parts[1];
-          payloadPart = payloadPart.replaceAll('-', '+').replaceAll('_', '/');
-          while (payloadPart.length % 4 != 0) {
-            payloadPart += '=';
-          }
-          final decoded = utf8.decode(base64.decode(payloadPart));
-          final decodedJson = json.decode(decoded);
-          if (decodedJson is Map) {
-            for (final key in [
-              'receipt',
-              'data',
-              'signedTransactionInfo',
-              'transactionReceipt'
-            ]) {
-              if (decodedJson.containsKey(key) && decodedJson[key] is String) {
-                final candidate = (decodedJson[key] as String).trim();
-                if (candidate.isNotEmpty) return candidate;
-              }
-            }
-          }
-        } catch (_) {}
-      }
-      return s;
-    }
-
-    if (s.contains('-') || s.contains('_')) {
-      s = s.replaceAll('-', '+').replaceAll('_', '/');
-      while (s.length % 4 != 0) {
-        s += '=';
-      }
-    }
-
+    // Default: return the cleaned string
     return s;
   }
 
@@ -962,7 +1090,9 @@ class SubscriptionProvider extends ChangeNotifier {
     _stripeCustomerId = data['stripeCustomerId'] as String?;
     _stripeSubscriptionId = data['stripeSubscriptionId'] as String?;
 
-    final bool isStandard = productId == _kProSubscriptionId;
+    final bool isStandard = 
+        productId == _kAndroidStandardSubscriptionId || 
+        productId == _kIOSStandardSubscriptionId;
     final bool isFounder = productId == _kFounderSubscriptionId;
     final bool isReferralGrant =
         productId == 'referral_bonus'; // Matches AuthProvider
@@ -1082,7 +1212,7 @@ class SubscriptionProvider extends ChangeNotifier {
         // --- NEW SELECTION LOGIC ---
         // Decide which ID to buy
         String targetId =
-            isFounder ? _kFounderSubscriptionId : _kProSubscriptionId;
+            isFounder ? _kFounderSubscriptionId : _platformStandardId;
 
         // Find it in the list
         ProductDetails? productToBuy;
@@ -1096,7 +1226,7 @@ class SubscriptionProvider extends ChangeNotifier {
             debugPrint("DEBUG: Founder SKU missing, falling back to Standard.");
             try {
               productToBuy =
-                  _products.firstWhere((p) => p.id == _kProSubscriptionId);
+                  _products.firstWhere((p) => p.id == _platformStandardId);
             } catch (_) {}
           }
         }
@@ -1159,7 +1289,7 @@ class SubscriptionProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> restorePurchases() async {
+  Future<void> restorePurchases({bool silent = false}) async {
     if (!_isMobilePlatform) {
       _purchaseError = "Restore is only available on mobile.";
       notifyListeners();
@@ -1184,7 +1314,7 @@ class SubscriptionProvider extends ChangeNotifier {
       if (receiptData != null && receiptData.trim().isNotEmpty) {
         final fakePurchase = PurchaseDetails(
           purchaseID: "manual_restore",
-          productID: _kProSubscriptionId,
+          productID: _platformStandardId,
           status: PurchaseStatus.restored,
           transactionDate: DateTime.now().millisecondsSinceEpoch.toString(),
           verificationData: PurchaseVerificationData(
@@ -1193,7 +1323,7 @@ class SubscriptionProvider extends ChangeNotifier {
             source: "app_store",
           ),
         );
-        await _handleSuccessfulPurchase(fakePurchase);
+        await _handleSuccessfulPurchase(fakePurchase, silent: silent);
       } else {
         debugPrint("DEBUG (Flutter): Falling back to restorePurchases().");
         // Start a short watchdog for restore as well to avoid indefinite wait
@@ -1204,10 +1334,10 @@ class SubscriptionProvider extends ChangeNotifier {
           final val = await (_restoreCompleter?.future
               .timeout(const Duration(seconds: 20)));
           if (val != null && val.trim().isNotEmpty) {
-            _restoredReceipts[_kProSubscriptionId] = val;
+            _restoredReceipts[_platformStandardId] = val;
             final fakePurchase2 = PurchaseDetails(
               purchaseID: "manual_restore2",
-              productID: _kProSubscriptionId,
+              productID: _platformStandardId,
               status: PurchaseStatus.restored,
               transactionDate: DateTime.now().millisecondsSinceEpoch.toString(),
               verificationData: PurchaseVerificationData(
@@ -1227,7 +1357,7 @@ class SubscriptionProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      _purchaseError = "Failed to restore purchases. Please try again.";
+      if(!silent) _purchaseError = "Failed to restore purchases. Please try again.";
     } finally {
       _isLoading = false;
       notifyListeners();

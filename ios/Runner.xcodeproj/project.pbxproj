@@ -16,10 +16,11 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		D5143E9F2EEB2A6300219852 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5143E9E2EEB2A6300219852 /* IAPManager.swift */; };
+		D5143EFF2EEB2AD200219852 /* IAPManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5143EFE2EEB2AD200219852 /* IAPManager.swift */; };
 		D572A82D2E3D33DA00332C8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D572A82C2E3D33DA00332C8E /* GoogleService-Info.plist */; };
 		D572A82E2E3D33DA00332C8E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D572A82C2E3D33DA00332C8E /* GoogleService-Info.plist */; };
 		D5EF8E322E4D729700C2DAC8 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5EF8E312E4D729700C2DAC8 /* StoreKit.framework */; };
-		
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
+		};
+		D5143EFA2EEB2A6300219852 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5D4E3672E3D4FAE003EFF5C /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7409A9316D1EEFAC7B383BE8CEC1BE03;
+			remoteInfo = webview_flutter_wkwebview;
+		};
+		D5143EFC2EEB2A6300219852 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5D4E3672E3D4FAE003EFF5C /* Pods.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 163A707D53693953E4DC7E0DE4C912A4;
+			remoteInfo = "webview_flutter_wkwebview-webview_flutter_wkwebview_privacy";
 		};
 		D57647072E696D1C0040304D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -670,6 +685,8 @@
 		CDB1ED0E19F4A2BD333C7984 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D1F578AD806987477925068D /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		D4DEEE5B5C1EA4921B802956 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
+		D5143E9E2EEB2A6300219852 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
+		D5143EFE2EEB2AD200219852 /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		D572A82C2E3D33DA00332C8E /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D576470B2E696D4D0040304D /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		D5D4C21B2E3D4FAE003EFF5C /* algorithm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = algorithm.h; sourceTree = "<group>"; };
@@ -7934,7 +7951,6 @@
 		D5D4E4782E3D5000003EFF5C /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		D5D4E4792E3D5000003EFF5C /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		D5EF8E312E4D729700C2DAC8 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		D5FCB47C2E545D2B00F754FD /* IAPManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IAPManager.swift; sourceTree = "<group>"; };
 		FBD2C0815E4FE86A6D2F70BC /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -8035,7 +8051,8 @@
 				1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */,
 				D572A82C2E3D33DA00332C8E /* GoogleService-Info.plist */,
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
-				D5FCB47C2E545D2B00F754FD /* IAPManager.swift */,
+				D5143E9E2EEB2A6300219852 /* IAPManager.swift */,
+				D5143EFE2EEB2AD200219852 /* IAPManager.swift */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
@@ -25590,6 +25607,8 @@
 				D5D4E45E2E3D4FB0003EFF5C /* SwiftyGif.bundle */,
 				D5D4E4602E3D4FB0003EFF5C /* url_launcher_ios.framework */,
 				D5D4E4622E3D4FB0003EFF5C /* url_launcher_ios_privacy.bundle */,
+				D5143EFB2EEB2A6300219852 /* webview_flutter_wkwebview.framework */,
+				D5143EFD2EEB2A6300219852 /* webview_flutter_wkwebview_privacy.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -25756,6 +25775,20 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		D5143EFB2EEB2A6300219852 /* webview_flutter_wkwebview.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = webview_flutter_wkwebview.framework;
+			remoteRef = D5143EFA2EEB2A6300219852 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D5143EFD2EEB2A6300219852 /* webview_flutter_wkwebview_privacy.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = webview_flutter_wkwebview_privacy.bundle;
+			remoteRef = D5143EFC2EEB2A6300219852 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		D57647082E696D1C0040304D /* firebase_app_check.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
@@ -26508,7 +26541,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D5FCB47D2E545D2B00F754FD /* IAPManager.swift in Sources */,
+				D5143EFF2EEB2AD200219852 /* IAPManager.swift in Sources */,
+				D5143E9F2EEB2A6300219852 /* IAPManager.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);
@@ -26672,7 +26706,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -26696,6 +26730,7 @@
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "PGM Student Suite";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -26816,7 +26851,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -26870,7 +26905,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = iphoneos;
@@ -26894,6 +26929,7 @@
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "PGM Student Suite";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -26922,6 +26958,7 @@
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "PGM Student Suite";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

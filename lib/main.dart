@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:student_suite/firebase_options.dart';
 import 'package:student_suite/providers/auth_provider.dart';
 import 'package:student_suite/providers/pomodoro_provider.dart';
@@ -66,24 +67,29 @@ Future<void> clearAllHiveData() async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // Firebase App Check is not always supported/required in web debug environments
-  // and some flutterfire internals rely on platform JS hooks that aren't present
-  // in certain dev/test setups. Activate App Check only on non-web platforms.
-  // if (!kIsWeb) {
-  //   await FirebaseAppCheck.instance.activate(
-  //     // Use Debug provider ONLY in debug mode. Use Play Integrity in Release.
-  //     androidProvider:
-  //         kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
-  //     appleProvider: kDebugMode
-  //         ? AppleProvider.debug
-  //         : AppleProvider.appAttestWithDeviceCheckFallback,
-  //   );
-  // }
+  FirebaseFirestore.instance.settings = const Settings(persistenceEnabled: true); // Reduces log noise
 
-  if (kIsWeb) {
-    await firebase_auth.FirebaseAuth.instance
-        .setPersistence(firebase_auth.Persistence.LOCAL);
+  // Activate App Check
+  if (!kIsWeb) {
+    // Determine the providers based on the build mode
+    // kDebugMode is true when running via Xcode/VS Code (Debug build)
+    // kReleaseMode is true for TestFlight/App Store builds
+    
+    await FirebaseAppCheck.instance.activate(
+      // Android
+      androidProvider: kDebugMode ? AndroidProvider.debug : AndroidProvider.playIntegrity,
+
+      // iOS Logic:
+      // In DEBUG mode: Use the Debug Provider. This forces the log to print the "Secret Token".
+      // In RELEASE mode: Use DeviceCheck. This uses the real Apple Key you uploaded.
+      appleProvider: kDebugMode ? AppleProvider.debug : AppleProvider.deviceCheck,
+    );
   }
+
+  // if (kIsWeb) {
+  //   await firebase_auth.FirebaseAuth.instance
+  //       .setPersistence(firebase_auth.Persistence.LOCAL);
+  // }
 
   try {
     await Hive.initFlutter();
@@ -150,6 +156,7 @@ Future<void> main() async {
   authProvider.setGuestBroadcastSeenBox(guestBroadcastSeenBox);
 
   await authProvider.init();
+  
 
   runApp(MyApp(
     tutorialProvider: tutorialProvider,
